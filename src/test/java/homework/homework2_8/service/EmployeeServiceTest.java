@@ -5,13 +5,11 @@ import homework.homework2_8.exception.EmployeeNotFoundException;
 import homework.homework2_8.exception.EmployeeStorageIsFullException;
 import homework.homework2_8.exception.InvalidDataException;
 import homework.homework2_8.model.Employee;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.net.ssl.ExtendedSSLSession;
+
 import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,15 +43,22 @@ public class EmployeeServiceTest {
         assertDoesNotThrow(()-> employeeService.add(e1));
         assertThrows(EmployeeAlreadyAddedException.class,() -> employeeService.add(e1));
     }
-//    @Test
-//    void whenStorageIsFullThenThrowException() {
-//        for (int i = 0; i < 5; i++) {
-//          Employee employee = new Employee("Name", "Lastname", 1, 100);
-//           assertDoesNotThrow(()->employeeService.add(employee));
-//        }
-//        assertThrows(EmployeeStorageIsFullException.class,
-//                ()->new Employee("fdgds", "fgdhjfd", 1, 10000));
-//    }
+    @Test
+    void whenStorageIsFullThenThrowException() {
+        Employee e1 = new Employee("Name", "Lastname", 1, 100);
+        assertDoesNotThrow(()->employeeService.add(e1));
+        Employee e2 = new Employee("Namee", "Lastnamee", 1, 100);
+        assertDoesNotThrow(()->employeeService.add(e2));
+        Employee e3 = new Employee("Nameee", "Lastnameee", 1, 100);
+        assertDoesNotThrow(()->employeeService.add(e3));
+        Employee e4 = new Employee("Nameeee", "Lastnameeee", 1, 100);
+        assertDoesNotThrow(()->employeeService.add(e4));
+        Employee e5 = new Employee("Nameeeee", "Lastnameeeee", 1, 100);
+        assertDoesNotThrow(()->employeeService.add(e5));
+        assertThrows(EmployeeStorageIsFullException.class,
+                ()->employeeService.add(new Employee("fdgds", "fgdhjfd", 1, 10000)));
+    }
+
     @Test
     void findPositive() {
         Employee expected = new Employee ("ivan", "ivanov", 1, 10000);
@@ -76,5 +81,10 @@ public class EmployeeServiceTest {
         assertTrue(employeeService.getAll().contains(expected));
         employeeService.remove(new Employee("ivan", "ivanov", 1, 10000));
         assertFalse(employeeService.getAll().contains(expected));
+    }
+    @Test
+    void whenInvalidDataThenThrowException() {
+        assertThrows(InvalidDataException.class,
+                ()->employeeService.add(new Employee("21313", "@#$%^", 1, 10000)));
     }
 }
